@@ -11,7 +11,7 @@ pipeline {
   stages {
     stage('Init') {
       steps {
-          sh "terraform init -backend-config params/${params.tfenv}.backend.tfvars"
+          sh "terraform init -reconfigure -backend-config params/${params.tfenv}.backend.tfvars"
       }
     }
 

@@ -28,7 +28,7 @@ pipeline {
 
     stage('Apply') {
        when {
-        branch 'main'
+        branch 'feature/jenkins'
         expression {
           return !['none'].contains(params.tfenv)
         }

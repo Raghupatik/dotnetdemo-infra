@@ -1,9 +1,7 @@
 pipeline {
   agent any
 
-  tools {
-    terraform 'terraform'
-  }
+
   environment {
     VARFILE = "params/${params.tfenv}.tfvars"
     AWS_ACCESS_KEY_ID = "${params.ACCESS_KEY}"

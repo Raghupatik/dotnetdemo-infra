@@ -27,7 +27,7 @@ pipeline {
         }
       }
       steps {
-        sh "Terraform plan --var-file='${VARFILE}'"
+        sh "terraform plan --var-file='${VARFILE}'"
       }
     }
 
@@ -40,14 +40,14 @@ pipeline {
       }
       steps {
         input 'Apply ?'
-        sh "Terraform apply --var-file="${VARFILE}" --auto-approve"
+        sh "terraform apply --var-file="${VARFILE}" --auto-approve"
       }
     }
 
      stage('Destroy') {
       steps {
         input 'destroy ?'
-        sh "Terraform destroy --var-file='${VARFILE}'' --auto-approve"
+        sh "terraform destroy --var-file='${VARFILE}'' --auto-approve"
       }
     }
   }

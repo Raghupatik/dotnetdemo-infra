@@ -14,13 +14,11 @@ provider "aws" {
   secret_key = var.secret_key
 }
 
-# terraform {
-#   backend "s3" {
-#     region = "us-east-1"
-#     bucket = "bermtecstate"
-#     key    = "terraform.tfstate"
-#   }
-# }
+terraform {
+  backend "s3" {
+    region = "us-east-1"
+  }
+}
 
 
 

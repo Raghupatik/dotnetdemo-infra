@@ -1,28 +1,53 @@
 pipeline {
   agent any
 
+  parameters {
+    choice(name: tfenv, choices: ['none', 'dev', 'test', 'stage', 'prod'], description: 'which env you want to choose ?')
+    string(name: 'ACCESS_KEY', description: '')
+    string(name: 'SECRET_KEY', description: '')
+  }
+
+  environment {
+    VARFILE = "params/${params.tfenv}.tfvars"
+    AWS_ACCESS_KEY_ID = "${params.ACCESS_KEY}"
+    AWS_SECRET_ACCESS_KEY="${params.SECRET_KEY}"
+  }
+
   stages {
     stage('Init') {
       steps {
-          sh 'terraform init'
+          sh "terraform init -backend-config params/${params.tfenv}.backend.tfvars"
       }
     }
 
     stage('Plan') {
+      when {
+        expression {
+          return !['none'].contains(params.tfenv)
+        }
+      }
       steps {
-        sh 'Terraform plan --var-file=""'
+        sh "Terraform plan --var-file='${VARFILE}'"
       }
     }
 
     stage('Apply') {
+       when {
+        branch 'main'
+        expression {
+          return !['none'].contains(params.tfenv)
+        }
+      }
       steps {
-        sh 'Terraform apply --var-file="" --auto-approve'
+        input 'Apply ?'
+        sh "Terraform apply --var-file="${VARFILE}" --auto-approve"
       }
     }
 
      stage('Destroy') {
       steps {
-        sh 'Terraform destroy --var-file="" --auto-approve'
+        input 'destroy ?'
+        sh "Terraform destroy --var-file='${VARFILE}'' --auto-approve"
       }
     }
   }

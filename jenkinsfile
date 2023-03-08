@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+      terraform 'terraform'
+    }
+
   parameters {
     choice(name: tfenv, choices: ['none', 'dev', 'test', 'stage', 'prod'], description: 'which env you want to choose ?')
     string(name: 'ACCESS_KEY', description: '')
